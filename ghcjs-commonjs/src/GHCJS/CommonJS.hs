@@ -154,6 +154,8 @@ fromJSValIO n a = fromJSVal a >>= \case
     --  forall e . CommonJSExport e => Export e
 type ExportMap = Map.Map String CommonJSExport
 
+
+
 defaultMain :: IO ()
 defaultMain = do
     em <- getRequireEmitter
@@ -214,7 +216,10 @@ call fn [a1, a2, a3] = js_call3 fn a1 a2 a3
 call fn args = js_apply fn (JSArray.fromList args)
 
 exportsMap :: MVar ExportMap
-exportsMap = unsafePerformIO $ newMVar Map.empty
+exportsMap = unsafePerformIO $ newMVar m
+  where
+    m :: ExportMap
+    m = Map.empty
 {-# NOINLINE exportsMap #-}
 
 getExport :: String -> IO (Maybe CommonJSExport)
